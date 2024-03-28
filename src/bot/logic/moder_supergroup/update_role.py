@@ -14,7 +14,7 @@ admin_router = Router(name='admin')
 admin_router.message.filter(IsAdmin())
 
 
-@admin_router.message(F.text.startswith('/update_role'))
+@admin_router.message(Command('update_role'))
 async def admin_handler(message: types.Message, state: FSMContext, db):
     """Admin command handler."""
 

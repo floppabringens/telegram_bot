@@ -20,8 +20,9 @@ class FloodApplicationRepo(Repository[FloodApplication]):
     async def new(
         self,
         user: _User,
-        quiz: list[str],
+        details: list[str],
         form: list[str],
+        documents: list[str]
     ) -> None:
         """Insert a new user into the database.
 
@@ -37,8 +38,9 @@ class FloodApplicationRepo(Repository[FloodApplication]):
         await self.session.merge(
             FloodApplication(
                 user=user,
-                quiz=quiz,
+                details=details,
                 form=form,
+                documents=documents,
             )
 
         )

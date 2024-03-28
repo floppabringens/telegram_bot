@@ -78,7 +78,9 @@ class UserRepo(Repository[User]):
         user_id: int,
         user_real_name: str | None = None,
         role: Role | None = Role.USER,
-        questions: list[type[Base]] = []
+        thread_id: int | None = None,
+        questions: list[type[Base]] | None = [],
+        flood_applications: list[type[Base]] | None = [],
     ) -> None:
         """Insert a new user into the database.
 
@@ -99,7 +101,9 @@ class UserRepo(Repository[User]):
                 user_id=user_id,
                 user_real_name=user_real_name,
                 role=role,
-                questions=questions
+                thread_id=thread_id,
+                questions=questions,
+                flood_applications=flood_applications
 
             )
 
@@ -122,4 +126,31 @@ class UserRepo(Repository[User]):
         )
         await self.session.execute(statement)
 
+    async def update_real_name(self, ident: int | str, name) -> None:
 
+        statement = (
+            update(self.type_model)
+            .where(self.type_model.__table__.c.user_id == ident)
+            .values({User.user_real_name: name})
+        )
+        await self.session.execute(statement)
+
+    async def update_thread(self, ident: int | str, thread_id) -> None:
+
+        statement = (
+            update(self.type_model)
+            .where(self.type_model.__table__.c.user_id == ident)
+            .values({User.thread_id: thread_id})
+        )
+        await self.session.execute(statement)
+
+    async def is_thread_exists(self, user_id) -> bool:
+
+        thread_id = await self.session.scalar(
+            select(User.thread_id).where(User.user_id == user_id).limit(1)
+        )
+
+        if thread_id is not None:
+            return True
+        else:
+            return False
