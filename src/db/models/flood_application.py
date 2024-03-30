@@ -18,13 +18,16 @@ class FloodApplication(Base):
         primary_key=True, autoincrement=True
     )
 
-    quiz: Mapped[list[str]] = mapped_column(
-        sa.Text, unique=False, nullable=False
+    details: Mapped[list[str]] = mapped_column(
+        sa.ARRAY(sa.Text), unique=False, nullable=False
     )
-    """ User status """
 
     form: Mapped[list[str]] = mapped_column(
         sa.Text, unique=False, nullable=False
+    )
+
+    documents: Mapped[list[str]] = mapped_column(
+        sa.ARRAY(sa.Text), unique=False, nullable=False
     )
 
     user_id: Mapped[int] = mapped_column(

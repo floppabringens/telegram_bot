@@ -25,7 +25,7 @@ async def get_quest(message: types.Message, state: FSMContext):
 
 
 @question_router.message(Question.get_question, F.text)
-async def process_quest(message: types.Message, state: FSMContext, db):
+async def process_quest(message: types.Message, state: FSMContext, db, bot):
     if len(message.text) >= 1000:
         await message.answer(
             'Вопрос не должен превышать 1000 символов. Введите заново или используйте команду /menu для выхода в меню.'
@@ -37,6 +37,7 @@ async def process_quest(message: types.Message, state: FSMContext, db):
 
     user = await db.user.get(message.from_user.id)
     await db.question.new(user=user, question_text=data['get_question'])
+    await create_thread(user, db, bot)
     await db.session.commit()
 
 

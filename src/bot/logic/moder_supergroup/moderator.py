@@ -9,11 +9,12 @@ from src.bot.kbds.text_builder import MENU_KB
 from aiogram.fsm.context import FSMContext
 from src.bot.structures.role import Role
 
+
 moder_router = Router(name='moder')
 moder_router.message.filter(IsModerator())
 
 
-@moder_router.message(F.text.startswith('/moderate'))
+@moder_router.message(Command('moderate'))
 async def test(message: types.Message, state: FSMContext, db):
     """Admin command handler."""
 
@@ -32,7 +33,7 @@ async def test(message: types.Message, state: FSMContext, db):
         return message.answer('Используйте команду корректно!')
 
 
-@moder_router.message(F.text.startswith('/answer'))
+@moder_router.message(Command('answer'))
 async def answer_question(message: types.Message, state: FSMContext, db, bot):
     """Admin command handler."""
 

@@ -30,6 +30,10 @@ class User(Base):
     role: Mapped[Role] = mapped_column(sa.Enum(Role), default=Role.USER)
     """ User's role """
 
+    thread_id: Mapped[int] = mapped_column(
+        sa.BigInteger, unique=True, nullable=True
+    )
+
     questions: Mapped[list['Question']] = orm.relationship(back_populates='user', lazy='selectin'
     )
 
