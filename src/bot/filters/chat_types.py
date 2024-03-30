@@ -17,7 +17,7 @@ class IsAdmin(Filter):
         pass
 
     async def __call__(self, message: types.Message, bot: Bot, db) -> bool:
-        if str(message.from_user.id) in conf.admin_list.admin_id:
+        if str(message.from_user.id) in conf.admin.admin_id:
             return True
         else:
             return False
@@ -28,7 +28,7 @@ class IsModerator(Filter):
         pass
 
     async def __call__(self, message: types.Message, bot: Bot, role: Role) -> bool:
-        if role in [Role.MODERATOR, Role.ADMINISTRATOR] or IsAdmin():
+        if role in [Role.MODERATOR, Role.ADMINISTRATOR]:
             return True
         else:
             return False

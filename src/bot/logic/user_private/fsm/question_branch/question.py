@@ -6,6 +6,7 @@ from aiogram.fsm.state import State, StatesGroup
 from src.bot.filters.chat_types import ChatTypeFilter
 
 from src.bot.kbds.text_builder import BUTTON_MENU
+from src.bot.logic.moder_supergroup.thread_logic import create_thread, answer_thread
 
 question_router = Router(name='question')
 question_router.message.filter(ChatTypeFilter(["private"]))
@@ -39,8 +40,6 @@ async def process_quest(message: types.Message, state: FSMContext, db, bot):
     await db.question.new(user=user, question_text=data['get_question'])
     await create_thread(user, db, bot)
     await db.session.commit()
-
-
 
     await state.clear()
     await message.answer('Ваш вопрос обработан. В ближайшее время на него ответит эксперт',

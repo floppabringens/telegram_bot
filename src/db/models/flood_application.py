@@ -23,7 +23,7 @@ class FloodApplication(Base):
     )
 
     form: Mapped[list[str]] = mapped_column(
-        sa.Text, unique=False, nullable=False
+        sa.ARRAY(sa.Text), unique=False, nullable=False
     )
 
     documents: Mapped[list[str]] = mapped_column(
