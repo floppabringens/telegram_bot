@@ -4,7 +4,7 @@ import time
 from aiogram import Router, types, F
 from aiogram.filters import Command, or_f
 
-from src.bot.filters.chat_types import IsModerator
+from src.bot.filters.chat_types import IsModerator, ChatTypeFilter
 from src.bot.kbds.text_builder import MENU_KB
 from aiogram.fsm.context import FSMContext
 from src.bot.structures.role import Role
@@ -12,6 +12,12 @@ from src.bot.structures.role import Role
 
 moder_router = Router(name='moder')
 moder_router.message.filter(IsModerator())
+
+
+@moder_router.message(Command('test'))
+async def test(message: types.Message, state: FSMContext, db):
+
+    await message.answer(str(F.IsModerator()))
 
 
 @moder_router.message(Command('moderate'))

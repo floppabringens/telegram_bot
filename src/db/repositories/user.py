@@ -82,18 +82,8 @@ class UserRepo(Repository[User]):
         questions: list[type[Base]] | None = [],
         flood_applications: list[type[Base]] | None = [],
     ) -> None:
-        """Insert a new user into the database.
 
-        :param user_id: Telegram user id
-        :param user_name: Telegram username
-        :param first_name: Telegram profile first name
-        :param second_name: Telegram profile second name
-        :param language_code: Telegram profile language code
-        :param is_premium: Telegram user premium status
-        :param role: User's role
-        :param user_chat: Telegram chat with user.
-        """
-        if str(user_id) in conf.admin_list.admin_id:
+        if str(user_id) in conf.admin.admin_id:
             role = Role.ADMINISTRATOR
 
         await self.session.merge(
@@ -115,7 +105,6 @@ class UserRepo(Repository[User]):
         return await self.session.scalar(
             select(User.role).where(User.user_id == user_id).limit(1)
         )
-
 
     async def update_role(self, user_id: int, role: Role) -> None:
         """Get user role by id."""

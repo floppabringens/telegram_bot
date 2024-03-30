@@ -34,7 +34,7 @@ class DetailsQuiz(CancellableScene, state='details'):
             quiz = QUESTIONS_DETAILS[step]
         except IndexError:
             # This error means that the question's list is over
-            await self.on_succ_leave(message, state)
+            await self.on_succ_leave_from_details(message, state)
             return await self.wizard.goto(FormQuiz)
 
         markup = ReplyKeyboardBuilder()
@@ -62,16 +62,11 @@ class DetailsQuiz(CancellableScene, state='details'):
             answer = answers.get(step)
             user_answers.append(f'{answer}')
 
-        Flood_Exp_Answers.quiz = user_answers
+        flood_exp_answers.details = user_answers
 
         await state.set_data({})
 
-        await message.answer(
-            'Для проведения эĸспертизы вам нужно заполнить заявление форме и приĸрепить необходимые доĸументы.'
-            'Ниже прикреплена форма с пустыми полями. Ознакомьтесь с шаблоном, а далее последовательно'
-            'отвечайте на вопросы бота.')
 
-        await message.answer_document(files['form_template'])
 
     @on.message.exit()
     async def on_exit(self, message: Message, state: FSMContext) -> None:
@@ -121,8 +116,9 @@ class DetailsQuiz(CancellableScene, state='details'):
 
         await message.answer("Пожалуйста, выберите ответ.")
 
+
 # Add handler that initializes the scene
 quiz_router.message.register(DetailsQuiz.as_handler(), FloodExp.application_on_flood, F.text.casefold() == "продолжить")
 
 scene_registry = SceneRegistry(quiz_router)
-scene_registry.add(DetailsQuiz, FormQuiz)
+scene_registry.add(DetailsQuiz, FormQuiz, DocumentsQuiz)

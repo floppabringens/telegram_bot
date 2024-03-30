@@ -20,6 +20,7 @@ async def admin_handler(message: types.Message, state: FSMContext, db):
 
     await state.clear()
 
+
     try:
         user_id, role = int(message.text.split()[-2]), message.text.split()[-1]
     except IndexError:

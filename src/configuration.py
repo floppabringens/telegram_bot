@@ -39,6 +39,7 @@ class DatabaseConfig:
 class AdminConfig:
 
     admin_id: list = getenv('ADMIN_LIST')
+    supergroup_id: int = getenv('SUPERGROUP_ID')
 
 
 @dataclass
@@ -72,7 +73,8 @@ class Configuration:
     db = DatabaseConfig()
     redis = RedisConfig()
     bot = BotConfig()
-    admin_list = AdminConfig()
+    admin = AdminConfig()
+
 
 
 conf = Configuration()

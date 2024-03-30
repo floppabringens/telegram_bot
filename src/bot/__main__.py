@@ -3,13 +3,14 @@ import asyncio
 import logging
 
 from aiogram import Bot, types
+from aiogram.client.bot import DefaultBotProperties
+from aiogram.enums import ParseMode
 from redis.asyncio.client import Redis
 
 from src.bot.dispatcher import get_dispatcher, get_redis_storage
 from src.bot.structures.data_structure import TransferData
 from src.configuration import conf
 from src.db.database import create_async_engine
-from  src.bot.structures.role import Role
 
 
 from common.bot_cmds_list import private
@@ -25,7 +26,7 @@ async def on_shutdown(bot):
 
 async def start_bot():
     """This function will start bot with polling mode."""
-    bot = Bot(token=conf.bot.token)
+    bot = Bot(token=conf.bot.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     storage = get_redis_storage(
         redis=Redis(
             db=conf.redis.db,

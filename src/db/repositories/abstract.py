@@ -80,10 +80,10 @@ class Repository(Generic[AbstractModel]):
 
     async def is_exists(self, ident: int | str) -> bool:
 
-        if  await self.session.get(entity=self.type_model, ident=ident) is not None:
+        if await self.session.get(entity=self.type_model, ident=ident) is not None:
             return True
         else:
-            return  False
+            return False
 
     async def update_cell(self, ident: int | str, column: str, value) -> None:
         """Update a cell in the database with the given value.
