@@ -68,13 +68,14 @@ class Repository(Generic[AbstractModel]):
 
         return (await self.session.scalars(statement)).all()
 
-    async def delete(self, whereclause) -> None:
+    async def delete(self, ident: int | str) -> None:
         """Delete model from the database.
 
         :param whereclause: (Optional) Which statement
         :return: Nothing
         """
-        statement = delete(self.type_model).where(whereclause)
+        statement = (delete(self.type_model).
+                     where(self.type_model.__table__.c.id == int(ident)))
         await self.session.execute(statement)
 
 
@@ -94,7 +95,7 @@ class Repository(Generic[AbstractModel]):
         """
         statement = (
             update(self.type_model)
-            .where(self.type_model.__table__.c.id == ident)
+            .where(self.type_model.__table__.c.id == int(ident))
             .values({column: value})
         )
         await self.session.execute(statement)

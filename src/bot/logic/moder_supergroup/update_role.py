@@ -5,7 +5,6 @@ from aiogram import Router, types, F
 from aiogram.filters import Command, or_f
 
 from src.bot.filters.chat_types import IsAdmin
-from src.bot.kbds.text_builder import MENU_KB
 from aiogram.fsm.context import FSMContext
 from src.bot.structures.role import Role
 

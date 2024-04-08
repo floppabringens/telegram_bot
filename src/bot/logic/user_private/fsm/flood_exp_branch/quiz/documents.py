@@ -8,9 +8,10 @@ from aiogram.types import Message
 
 from src.bot.kbds.reply import get_keyboard
 from src.bot.kbds.text_builder import BUTTON_MENU
-from src.bot.logic.moder_supergroup.thread_logic import create_thread, answer_thread, send_flood_app
+from src.bot.logic.moder_supergroup.thread_work import create_thread, answer_thread, send_flood_app
 from src.bot.logic.user_private.fsm.flood_exp_branch.quiz.scenes_common import QuestionWithType, CancellableScene, \
-    flood_exp_answers, QUESTIONS_DOCUMENTS
+    flood_exp_answers, QUESTIONS_DOCUMENTS, QUESTIONS_DETAILS
+from src.bot.pdf.pdf_creation import send_pdf
 
 
 class DocumentsQuiz(CancellableScene, state="documents"):
@@ -52,28 +53,44 @@ class DocumentsQuiz(CancellableScene, state="documents"):
 
         try:
             last = user_answers[3]
-            print(user_answers)
+
             flood_exp_answers.documents = user_answers
 
             user = await db.user.get(message.from_user.id)
 
-            await db.flood_application.new(user=user, details=flood_exp_answers.details,
-                                           form=flood_exp_answers.form, documents=flood_exp_answers.documents)
-
             await db.user.update_real_name(user.user_id, flood_exp_answers.form[0])
 
-            await create_thread(user, db, bot, flood_exp_answers)
+            await create_thread(user, db, bot)
 
             user = await db.user.get(message.from_user.id)
 
-            await send_flood_app(bot, user)
+            flood = await send_pdf(user, flood_exp_answers, bot)
+
+            pdf_id = flood.document.file_id
+
+            user_message_id = flood.message_id
+
+            if flood_exp_answers.details[2] == QUESTIONS_DETAILS[2].answers[0].text:
+                price = 100
+            elif flood_exp_answers.details[2] == QUESTIONS_DETAILS[2].answers[1].text:
+                price = 200
+            elif flood_exp_answers.details[2] == QUESTIONS_DETAILS[2].answers[2].text:
+                price = 300
+            else:
+                price = 0
+
+            await db.flood_application.new(user=user, details=flood_exp_answers.details,
+                                           form=flood_exp_answers.form, documents=flood_exp_answers.documents, pdf_id=pdf_id,
+                                           user_message_id=user_message_id, price=price)
 
             await db.session.commit()
 
-            await message.answer(
-                "Ваше заявление принято, в ближайшее время специалист его проверит. А таĸже вы можете проверить статус модерации в меню.",
-                reply_markup=BUTTON_MENU
-            )
+            user = await db.user.get(message.from_user.id)
+
+            await send_flood_app(user, flood_exp_answers, db, bot)
+
+
+
         except IndexError:
             await message.answer(
                 "Что вас интересует?",

@@ -18,7 +18,6 @@ class FloodExpAnswers:
 
 flood_exp_answers = FloodExpAnswers()
 
-
 @dataclass
 class Answer:
     """
@@ -124,7 +123,7 @@ QUESTIONS_FORM = [
         type=ContentType.TEXT
     ),
     QuestionWithType(
-        text='Вам номер телефона',
+        text='Ваш номер телефона',
         type=ContentType.TEXT
     ),
     QuestionWithType(

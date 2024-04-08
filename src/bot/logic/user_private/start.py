@@ -5,7 +5,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 
 from src.bot.filters.chat_types import ChatTypeFilter
-from src.bot.kbds.text_builder import MENU_KB
+from src.bot.kbds.main_menu_logic import MENU_KB
 from src.configuration import conf
 
 
@@ -22,6 +22,9 @@ async def start_handler(message: types.Message, state: FSMContext, db):
         await db.user.new(user_id=message.from_user.id)
         await db.session.commit()
 
+    user = await db.user.get(message.from_user.id)
+
+
     await message.answer('Здравствуйте. Этот бот поможет вам заполнить заявку по необходимой экспертизе.',
-                                reply_markup=MENU_KB
+                                reply_markup=await MENU_KB(user)
                                 )

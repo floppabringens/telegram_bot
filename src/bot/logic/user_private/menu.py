@@ -5,19 +5,22 @@ from aiogram import Router, types, F
 from aiogram.filters import Command, or_f
 
 from src.bot.filters.chat_types import ChatTypeFilter
-from src.bot.kbds.text_builder import MENU_KB
+
 from aiogram.fsm.context import FSMContext
 
+from src.bot.kbds.main_menu_logic import MENU_KB
 
 menu_router = Router(name='menu')
 menu_router.message.filter(ChatTypeFilter(["private"]))
 
 @menu_router.message(or_f(Command('menu'), F.text.casefold() == 'menu', F.text.casefold() == 'меню'))
-async def start_handler(message: types.Message, state: FSMContext):
+async def start_handler(message: types.Message, state: FSMContext, db):
     """Menu command handler."""
     await state.clear()
+
+    user = await db.user.get(message.from_user.id)
     await message.answer('Что вас интересует?',
-                                reply_markup=MENU_KB
+                                reply_markup=await MENU_KB(user)
                                 )
 
 # @menu_router.message(F.document)

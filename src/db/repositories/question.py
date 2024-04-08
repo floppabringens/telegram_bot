@@ -22,6 +22,7 @@ class QuestionRepo(Repository[Question]):
         user: _User,
         question_text: str,
         answer_text: str | None = None,
+        user_message_id: int | None = None,
     ) -> None:
         """Insert a new user into the database.
 
@@ -39,16 +40,17 @@ class QuestionRepo(Repository[Question]):
                 question_text=question_text,
                 user=user,
                 answer_text=answer_text,
+                user_message_id=user_message_id,
             )
 
         )
 
-    # async def update_answer(self, id: int, answer_text: str) -> None:
-    #     """Get user role by id."""
-    #     statement = (
-    #         update(self.type_model)
-    #         .where(self.type_model.__table__.c.id == id)
-    #         .values({Question.answer_text: answer_text})
-    #     )
-    #     await self.session.execute(statement)
+    async def update_answer(self, id: int, answer_text: str) -> None:
+        """Get user role by id."""
+        statement = (
+            update(self.type_model)
+            .where(self.type_model.__table__.c.id == id)
+            .values({Question.answer_text: answer_text})
+        )
+        await self.session.execute(statement)
 

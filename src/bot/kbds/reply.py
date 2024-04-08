@@ -1,4 +1,4 @@
-from aiogram.types import KeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
@@ -26,9 +26,9 @@ def get_keyboard(
     keyboard = ReplyKeyboardBuilder()
 
     for index, text in enumerate(btns, start=0):
-        
+
         if request_contact and request_contact == index:
-            keyboard.add(KeyboardButton(text=text, request_contact=True))
+            keyboard.add(KeyboardButton(text=text, request_contact=True, is_persistent=True))
 
         elif request_location and request_location == index:
             keyboard.add(KeyboardButton(text=text, request_location=True))
@@ -37,5 +37,6 @@ def get_keyboard(
 
     return keyboard.adjust(*sizes).as_markup(
             resize_keyboard=True, input_field_placeholder=placeholder, is_persistent=True)
+
 
 

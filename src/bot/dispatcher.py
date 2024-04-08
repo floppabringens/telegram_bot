@@ -40,7 +40,7 @@ def get_dispatcher(
 ):
     """This function set up dispatcher with routers, filters and middlewares."""
     dp = Dispatcher(
-        # storage=storage,
+        storage=storage,
         fsm_strategy=fsm_strategy,
         events_isolation=event_isolation,
     )
@@ -51,6 +51,7 @@ def get_dispatcher(
     dp.include_router(echo_router)
 
     # Register middlewares
+    dp.callback_query.outer_middleware(DatabaseMiddleware())
     dp.message.outer_middleware(DatabaseMiddleware())
     dp.message.outer_middleware(RoleMiddleware())
 

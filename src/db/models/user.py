@@ -40,13 +40,3 @@ class User(Base):
     flood_applications: Mapped[list['FloodApplication']] = orm.relationship(back_populates='user', lazy='selectin'
     )
 
-
-    #     """ Telegram chat with user """
-    #
-    #     other_fk: Mapped[int] = mapped_column(
-    #         sa.ForeignKey('other.id'), unique=False, nullable=False
-    #     )
-    #
-    #     other: Mapped[FloodApplication] = orm.relationship(
-    #         'other', uselist=False, lazy='joined'
-    #     )

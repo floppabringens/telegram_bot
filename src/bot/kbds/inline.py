@@ -1,10 +1,13 @@
+from typing import Type
+
+from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def get_callback_btns(
     *,
-    btns: dict[str, str],
+    btns: dict[str, str | Type[CallbackData]],
     sizes: tuple[int] = (2,)):
 
     keyboard = InlineKeyboardBuilder()

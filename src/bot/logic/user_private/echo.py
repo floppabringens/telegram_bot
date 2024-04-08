@@ -4,6 +4,7 @@ from aiogram import Router, types
 
 from src.bot.filters.chat_types import ChatTypeFilter
 
+
 echo_router = Router(name='echo')
 echo_router.message.filter(ChatTypeFilter(["private"]))
 

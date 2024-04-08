@@ -25,6 +25,10 @@ class Question(Base):
         sa.Text, unique=False, nullable=True
     )
 
+    user_message_id: Mapped[int] = mapped_column(
+        unique=True, nullable=True
+    )
+
     user_id: Mapped[int] = mapped_column(
         sa.ForeignKey("user.user_id", ondelete="CASCADE"), nullable=False
     )
